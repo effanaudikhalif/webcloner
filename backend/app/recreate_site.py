@@ -1,11 +1,16 @@
 import json
 from typing import Dict, Any
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def build_summary_and_minimal_html(context_dict: Dict[str, Any]) -> tuple:
     """
     Build a summary JSON object and minimal HTML snippet from the scraped context.
     """
+    logger.info("      → Building summary and minimal HTML...")
+    
     title = context_dict.get("title", "Untitled")
     images = context_dict.get("images", [])
     summary = context_dict.get("summary", "")
@@ -17,6 +22,7 @@ def build_summary_and_minimal_html(context_dict: Dict[str, Any]) -> tuple:
         "images": images[:5],  # Limit to first 5 images
         "summary": summary
     }
+    logger.info(f"      → Summary created: {summary_json_obj}")
     
     # Create minimal HTML snippet
     minimal_html = f"""
@@ -28,6 +34,7 @@ def build_summary_and_minimal_html(context_dict: Dict[str, Any]) -> tuple:
         </div>
     </div>
     """
+    logger.info(f"      → Minimal HTML created: {len(minimal_html)} characters")
     
     return summary_json_obj, minimal_html
 
@@ -36,7 +43,10 @@ def build_critical_css(filtered_css: str) -> str:
     """
     Build critical CSS from filtered CSS content.
     """
+    logger.info("      → Building critical CSS...")
+    
     if not filtered_css:
+        logger.warning("      ⚠️  No filtered CSS provided")
         return ""
     
     # For now, return the filtered CSS as critical CSS
@@ -45,6 +55,7 @@ def build_critical_css(filtered_css: str) -> str:
     # - Prioritize above-the-fold styles
     # - Remove unused or redundant rules
     
+    logger.info(f"      ✅ Critical CSS created: {len(filtered_css)} characters")
     return filtered_css
 
 
@@ -52,6 +63,8 @@ def format_prompt(summary_json_obj: Dict[str, Any], minimal_html: str, critical_
     """
     Format a prompt for Claude to recreate the website.
     """
+    logger.info("      → Formatting prompt for Claude AI...")
+    
     prompt = f"""
 You are a web developer tasked with recreating a website based on the following information:
 
@@ -94,4 +107,5 @@ Please provide your response in the following format:
 Make sure the HTML and CSS work together to create a functional, styled webpage.
 """
     
+    logger.info(f"      ✅ Prompt formatted: {len(prompt)} characters")
     return prompt 
