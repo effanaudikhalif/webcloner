@@ -14,21 +14,47 @@ def extract_code_blocks(text: str) -> Tuple[str, str]:
     html_code = ""
     css_code = ""
     
-    # Find HTML code block
-    html_match = re.search(r'```html\s*\n(.*?)\n```', text, re.DOTALL)
-    if html_match:
-        html_code = html_match.group(1).strip()
-        logger.info(f"      ✅ HTML code block found: {len(html_code)} characters")
-    else:
+    # Find HTML code block - try multiple patterns
+    html_patterns = [
+        r'```html\s*\n(.*?)\n```',
+        r'```HTML\s*\n(.*?)\n```',
+        r'<html.*?</html>',
+        r'<!DOCTYPE html.*?</html>'
+    ]
+    
+    for pattern in html_patterns:
+        html_match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+        if html_match:
+            html_code = html_match.group(1).strip()
+            logger.info(f"      ✅ HTML code block found: {len(html_code)} characters")
+            break
+    
+    if not html_code:
         logger.warning("      ⚠️  No HTML code block found")
     
-    # Find CSS code block
-    css_match = re.search(r'```css\s*\n(.*?)\n```', text, re.DOTALL)
-    if css_match:
-        css_code = css_match.group(1).strip()
-        logger.info(f"      ✅ CSS code block found: {len(css_code)} characters")
-    else:
-        logger.warning("      ⚠️  No CSS code block found")
+    # Find CSS code block - try multiple patterns
+    css_patterns = [
+        r'```css\s*\n(.*?)\n```',
+        r'```CSS\s*\n(.*?)\n```',
+        r'<style.*?>(.*?)</style>',
+        r'/\*.*?\*/.*?\{.*?\}',  # Look for CSS rules
+    ]
+    
+    for pattern in css_patterns:
+        css_match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+        if css_match:
+            css_code = css_match.group(1).strip()
+            logger.info(f"      ✅ CSS code block found: {len(css_code)} characters")
+            break
+    
+    if not css_code:
+        # Try to extract any CSS-like content
+        css_like = re.findall(r'[.#][a-zA-Z][a-zA-Z0-9_-]*\s*\{[^}]*\}', text)
+        if css_like:
+            css_code = '\n'.join(css_like)
+            logger.info(f"      ✅ CSS-like content found: {len(css_code)} characters")
+        else:
+            logger.warning("      ⚠️  No CSS code block found")
     
     return html_code, css_code
 

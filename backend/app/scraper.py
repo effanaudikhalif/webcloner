@@ -7,6 +7,7 @@ from typing import List, Dict, Any
 import re
 import json
 import logging
+from urllib.parse import urlparse, urljoin
 
 logger = logging.getLogger(__name__)
 
@@ -77,19 +78,33 @@ async def scrape_website(url: str) -> ScrapedContext:
             for link in soup.find_all('link', rel='stylesheet'):
                 href = link.get('href')
                 if href:
+                    # Convert relative URLs to absolute URLs
+                    if href.startswith('//'):
+                        css_url = f"https:{href}"
+                    elif href.startswith('/'):
+                        # Get the base URL
+                        parsed_url = urlparse(url)
+                        base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+                        css_url = f"{base_url}{href}"
+                    elif href.startswith('http'):
+                        css_url = href
+                    else:
+                        # Relative URL
+                        css_url = urljoin(url, href)
+                    
                     try:
-                        logger.info(f"   → Fetching external CSS: {href}")
+                        logger.info(f"   → Fetching external CSS: {css_url}")
                         async with aiohttp.ClientSession() as session:
-                            async with session.get(href) as response:
+                            async with session.get(css_url, timeout=10) as response:
                                 if response.status == 200:
                                     external_css = await response.text()
                                     css_contents += external_css + "\n"
                                     external_css_count += 1
                                     logger.info(f"   ✅ External CSS fetched: {len(external_css)} characters")
                                 else:
-                                    logger.warning(f"   ⚠️  Failed to fetch CSS from {href}: {response.status}")
+                                    logger.warning(f"   ⚠️  Failed to fetch CSS from {css_url}: {response.status}")
                     except Exception as e:
-                        logger.warning(f"   ⚠️  Error fetching CSS from {href}: {e}")
+                        logger.warning(f"   ⚠️  Error fetching CSS from {css_url}: {e}")
                         pass  # Skip if external CSS can't be loaded
             
             logger.info(f"   ✅ External CSS processed: {external_css_count} files")

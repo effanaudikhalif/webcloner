@@ -4,159 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage | Boston University</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container">
-            <div class="header-brand">
-                <svg class="bu-logo" viewBox="0 0 200 60" aria-label="Boston University">
-                    <text x="10" y="35" class="branding-mark-svg-bu_today-bu">BOSTON</text>
-                    <text x="10" y="50" class="branding-mark-svg-bu_today-today">UNIVERSITY</text>
-                </svg>
-            </div>
-            <nav class="main-nav" aria-label="Main navigation">
-                <ul>
-                    <li><a href="#academics">Academics</a></li>
-                    <li><a href="#admissions">Admissions</a></li>
-                    <li><a href="#research">Research</a></li>
-                    <li><a href="#student-life">Student Life</a></li>
-                    <li><a href="#about">About</a></li>
+    <header class="main-header" role="banner">
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="container">
+                <div class="navbar-brand">
+                    <svg class="bu-logo" width="120" height="40" viewBox="0 0 120 40" aria-label="Boston University">
+                        <rect width="120" height="40" class="st0"/>
+                        <text x="10" y="25" class="branding-mark-svg-bu_today-bu" font-family="serif" font-size="18" font-weight="bold">BOSTON</text>
+                        <text x="10" y="35" class="branding-mark-svg-bu_today-today" font-family="serif" font-size="8">UNIVERSITY</text>
+                    </svg>
+                </div>
+                <ul class="navbar-nav" role="menubar">
+                    <li role="menuitem"><a href="#academics">Academics</a></li>
+                    <li role="menuitem"><a href="#admissions">Admissions</a></li>
+                    <li role="menuitem"><a href="#research">Research</a></li>
+                    <li role="menuitem"><a href="#campus-life">Campus Life</a></li>
+                    <li role="menuitem"><a href="#news">News</a></li>
                 </ul>
-            </nav>
-        </div>
+            </div>
+        </nav>
     </header>
 
-    <main class="main-content">
-        <section class="hero-section">
-            <div class="hero-image">
-                <img src="home/img/Sydney-Lemmon-002-1200x826.jpg" alt="Boston University campus life" />
-            </div>
-            <div class="hero-content">
-                <div class="container">
-                    <h1>Welcome to Boston University</h1>
-                    <p>Discover excellence in education, research, and innovation at one of the world's leading universities.</p>
-                    <div class="hero-actions">
-                        <a href="#apply" class="btn btn-primary">Apply Now</a>
-                        <a href="#visit" class="btn btn-secondary">Visit Campus</a>
+    <main class="main-content" role="main">
+        <section class="hero-section" aria-label="Featured content">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-image">
+                        <img src="home/img/Sydney-Lemmon-002-1200x826.jpg" alt="Boston University campus scene" loading="lazy">
+                    </div>
+                    <div class="hero-text">
+                        <h1>Welcome to Boston University</h1>
+                        <p>Discover excellence in education, research, and innovation at one of the world's leading research universities.</p>
+                        <a href="#learn-more" class="cta-button" role="button">Learn More</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="news-section">
+        <section class="featured-stories" aria-label="Featured stories">
             <div class="container">
-                <div class="section-header">
-                    <h2>Latest News & Stories</h2>
-                    <div class="news-brands">
-                        <div class="brand-item">
-                            <svg class="brand-logo" viewBox="0 0 100 30">
-                                <text x="5" y="15" class="branding-mark-svg-bu_today-bu">BU</text>
-                                <text x="5" y="25" class="branding-mark-svg-bu_today-today">TODAY</text>
-                            </svg>
-                        </div>
-                        <div class="brand-item">
-                            <svg class="brand-logo" viewBox="0 0 100 30">
-                                <text x="5" y="15" class="branding-mark-svg-the_brink-the">THE</text>
-                                <text x="5" y="25" class="branding-mark-svg-the_brink-brink">BRINK</text>
-                            </svg>
-                        </div>
-                        <div class="brand-item">
-                            <svg class="brand-logo" viewBox="0 0 100 30">
-                                <text x="5" y="20" class="branding-mark-svg-bostonia-bostonia">BOSTONIA</text>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="news-grid">
-                    <article class="news-item featured">
-                        <img src="home/img/sha-versailles-feat-1024x684.jpg" alt="Featured story" />
-                        <div class="news-content">
-                            <h3>Research Excellence at BU</h3>
-                            <p>Discover groundbreaking research and innovation happening across our campus.</p>
+                <h2>Featured Stories</h2>
+                <div class="stories-grid">
+                    <article class="story-card">
+                        <img src="home/img/AYLI-Bryn-Boyce-feat-150x150.jpg" alt="Student spotlight" loading="lazy">
+                        <div class="story-content">
+                            <h3>Student Spotlight</h3>
+                            <p>Discover the achievements of our exceptional students making a difference in their fields.</p>
+                            <div class="story-source">
+                                <span class="branding-mark-svg-bu_today-bu">BU</span>
+                                <span class="branding-mark-svg-bu_today-today">Today</span>
+                            </div>
                         </div>
                     </article>
-                    
-                    <article class="news-item">
-                        <img src="home/img/AYLI-Bryn-Boyce-feat-150x150.jpg" alt="Student spotlight" />
-                        <div class="news-content">
-                            <h4>Student Spotlight</h4>
-                            <p>Meet the exceptional students making a difference.</p>
+
+                    <article class="story-card">
+                        <img src="home/img/AdnanHyder_featcrop-150x150.jpg" alt="Faculty research" loading="lazy">
+                        <div class="story-content">
+                            <h3>Research Breakthrough</h3>
+                            <p>Faculty members lead groundbreaking research initiatives across diverse disciplines.</p>
+                            <div class="story-source">
+                                <span class="branding-mark-svg-the_brink-the">The</span>
+                                <span class="branding-mark-svg-the_brink-brink">Brink</span>
+                            </div>
                         </div>
                     </article>
-                    
-                    <article class="news-item">
-                        <img src="home/img/AdnanHyder_featcrop-150x150.jpg" alt="Faculty achievement" />
-                        <div class="news-content">
-                            <h4>Faculty Achievement</h4>
-                            <p>Celebrating our distinguished faculty and their contributions.</p>
-                        </div>
-                    </article>
-                    
-                    <article class="news-item">
-                        <img src="home/img/25-1252-STOCK-042-feat-150x150.jpg" alt="Campus life" />
-                        <div class="news-content">
-                            <h4>Campus Life</h4>
-                            <p>Experience the vibrant community at Boston University.</p>
+
+                    <article class="story-card">
+                        <img src="home/img/25-1252-STOCK-042-feat-150x150.jpg" alt="Campus life" loading="lazy">
+                        <div class="story-content">
+                            <h3>Campus Life</h3>
+                            <p>Experience the vibrant community and countless opportunities for growth and engagement.</p>
+                            <div class="story-source">
+                                <span class="branding-mark-svg-bostonia-bostonia">Bostonia</span>
+                            </div>
                         </div>
                     </article>
                 </div>
             </div>
         </section>
 
-        <section class="highlights-section">
+        <section class="highlight-section" aria-label="University highlights">
             <div class="container">
-                <div class="highlights-grid">
-                    <div class="highlight-item">
-                        <h3>World-Class Education</h3>
-                        <p>17 schools and colleges offering undergraduate, graduate, and professional programs.</p>
+                <div class="highlight-content">
+                    <div class="highlight-image">
+                        <img src="home/img/sha-versailles-feat-1024x684.jpg" alt="University program highlight" loading="lazy">
                     </div>
-                    <div class="highlight-item">
-                        <h3>Research Impact</h3>
-                        <p>Leading research university with over $400 million in sponsored research.</p>
-                    </div>
-                    <div class="highlight-item">
-                        <h3>Global Community</h3>
-                        <p>Students from all 50 states and over 100 countries call BU home.</p>
+                    <div class="highlight-text">
+                        <h2>Global Excellence</h2>
+                        <p>Boston University's commitment to academic excellence and global engagement creates opportunities for students to make their mark on the world.</p>
+                        <a href="#programs" class="secondary-button" role="button">Explore Programs</a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="site-footer">
+    <footer class="main-footer" role="contentinfo">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>Academics</h4>
+                    <h3>Academics</h3>
                     <ul>
+                        <li><a href="#undergraduate">Undergraduate</a></li>
+                        <li><a href="#graduate">Graduate</a></li>
                         <li><a href="#schools">Schools & Colleges</a></li>
-                        <li><a href="#programs">Programs</a></li>
-                        <li><a href="#libraries">Libraries</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Research</h4>
+                    <h3>Campus</h3>
                     <ul>
-                        <li><a href="#research">Research at BU</a></li>
-                        <li><a href="#centers">Centers & Institutes</a></li>
-                        <li><a href="#innovation">Innovation</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Student Life</h4>
-                    <ul>
+                        <li><a href="#visit">Visit</a></li>
+                        <li><a href="#maps">Maps & Directions</a></li>
                         <li><a href="#housing">Housing</a></li>
-                        <li><a href="#dining">Dining</a></li>
-                        <li><a href="#activities">Activities</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>About BU</h4>
+                    <h3>Connect</h3>
                     <ul>
-                        <li><a href="#facts">Facts & Figures</a></li>
-                        <li><a href="#history">History</a></li>
-                        <li><a href="#leadership">Leadership</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#social">Social Media</a></li>
+                        <li><a href="#news">News & Events</a></li>
                     </ul>
                 </div>
             </div>

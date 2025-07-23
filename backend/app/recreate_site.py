@@ -82,10 +82,7 @@ You are a web developer tasked with recreating a website based on the following 
 ```
 
 ## Task
-Please recreate this website by providing:
-
-1. **HTML Code**: A complete HTML structure that captures the essence of the original website
-2. **CSS Code**: Styling that matches the original design
+Please recreate this website by providing BOTH HTML and CSS code blocks.
 
 ## Requirements
 - Use semantic HTML5 elements
@@ -94,17 +91,19 @@ Please recreate this website by providing:
 - Match the original styling as closely as possible
 - Use modern CSS techniques (Flexbox, Grid, etc.)
 
-Please provide your response in the following format:
+## IMPORTANT: You MUST provide BOTH HTML and CSS code blocks in your response.
+
+Please provide your response in EXACTLY this format:
 
 ```html
-[Your HTML code here]
+[Your complete HTML code here]
 ```
 
 ```css
-[Your CSS code here]
+[Your complete CSS code here]
 ```
 
-Make sure the HTML and CSS work together to create a functional, styled webpage.
+Make sure the HTML and CSS work together to create a functional, styled webpage. The CSS should be comprehensive and include all necessary styles for the layout, typography, colors, and responsive design.
 """
     
     logger.info(f"      ✅ Prompt formatted: {len(prompt)} characters")
