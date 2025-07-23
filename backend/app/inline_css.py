@@ -19,24 +19,37 @@ def extract_code_blocks(text: str) -> Tuple[str, str]:
         r'```html\s*\n(.*?)\n```',
         r'```HTML\s*\n(.*?)\n```',
         r'<html.*?</html>',
-        r'<!DOCTYPE html.*?</html>'
+        r'<!DOCTYPE html.*?</html>',
+        r'<html[^>]*>.*?</html>',
+        r'<!DOCTYPE[^>]*>.*?</html>'
     ]
     
     for pattern in html_patterns:
-        html_match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
-        if html_match:
-            html_code = html_match.group(1).strip()
-            logger.info(f"      ✅ HTML code block found: {len(html_code)} characters")
-            break
+        try:
+            html_match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+            if html_match and html_match.groups():
+                html_code = html_match.group(1).strip()
+                logger.info(f"      ✅ HTML code block found: {len(html_code)} characters")
+                break
+        except (IndexError, AttributeError) as e:
+            logger.warning(f"      ⚠️  Error extracting HTML with pattern {pattern}: {e}")
+            continue
     
     if not html_code:
-        logger.warning("      ⚠️  No HTML code block found")
+        # Try to find any HTML-like content
+        html_like = re.search(r'<[^>]+>.*?</[^>]+>', text, re.DOTALL)
+        if html_like:
+            html_code = html_like.group(0)
+            logger.info(f"      ✅ HTML-like content found: {len(html_code)} characters")
+        else:
+            logger.warning("      ⚠️  No HTML code block found")
     
     # Find CSS code block - try multiple patterns
     css_patterns = [
         r'```css\s*\n(.*?)\n```',
         r'```CSS\s*\n(.*?)\n```',
-        r'<style.*?>(.*?)</style>',
+        r'<style[^>]*>(.*?)</style>',
+        r'/\*.*?\*/.*?\{.*?\}',  # Look for CSS rules with comments
     ]
     
     for pattern in css_patterns:
@@ -53,14 +66,35 @@ def extract_code_blocks(text: str) -> Tuple[str, str]:
     if not css_code:
         # Try to extract any CSS-like content as fallback
         try:
-            css_like = re.findall(r'[.#][a-zA-Z][a-zA-Z0-9_-]*\s*\{[^}]*\}', text)
-            if css_like:
-                css_code = '\n'.join(css_like)
+            # Look for CSS rules in the text
+            css_rules = re.findall(r'[.#]?[a-zA-Z][a-zA-Z0-9_-]*\s*\{[^}]*\}', text)
+            if css_rules:
+                css_code = '\n'.join(css_rules)
                 logger.info(f"      ✅ CSS-like content found: {len(css_code)} characters")
             else:
-                logger.warning("      ⚠️  No CSS code block found")
+                # Look for any content that might be CSS
+                css_sections = re.findall(r'\{[^}]*\}', text)
+                if css_sections:
+                    css_code = '\n'.join(css_sections)
+                    logger.info(f"      ✅ CSS sections found: {len(css_code)} characters")
+                else:
+                    logger.warning("      ⚠️  No CSS code block found")
         except Exception as e:
             logger.warning(f"      ⚠️  Error extracting CSS-like content: {e}")
+    
+    # If still no content, try to extract from the entire response
+    if not html_code and not css_code:
+        logger.warning("      ⚠️  No code blocks found, trying to extract from full response")
+        # Look for HTML structure in the entire response
+        if '<html' in text.lower() or '<!doctype' in text.lower():
+            # Extract everything that looks like HTML
+            html_start = text.lower().find('<html')
+            if html_start == -1:
+                html_start = text.lower().find('<!doctype')
+            
+            if html_start != -1:
+                html_code = text[html_start:]
+                logger.info(f"      ✅ Extracted HTML from full response: {len(html_code)} characters")
     
     return html_code, css_code
 

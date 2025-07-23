@@ -129,8 +129,9 @@ Your CSS must include:
 - All hover effects and interactions
 - The same spacing, margins, and padding
 
-## OUTPUT FORMAT:
-Provide your response in EXACTLY this format:
+## OUTPUT FORMAT - YOU MUST FOLLOW THIS EXACTLY:
+
+You MUST provide your response in EXACTLY this format with the code blocks:
 
 ```html
 [Complete HTML document that recreates the original website structure]
@@ -140,7 +141,11 @@ Provide your response in EXACTLY this format:
 [Complete CSS that matches the original styling exactly]
 ```
 
-IMPORTANT: The final result should look IDENTICAL to the original website. Pay attention to every detail including colors, fonts, spacing, layout, and structure.
+IMPORTANT: 
+- The final result should look IDENTICAL to the original website
+- Pay attention to every detail including colors, fonts, spacing, layout, and structure
+- You MUST include both the ```html and ```css code blocks in your response
+- Do not include any text outside of the code blocks
 """
     
     logger.info(f"      ✅ Prompt formatted: {len(prompt)} characters")
