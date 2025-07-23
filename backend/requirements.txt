@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+anthropic
+playwright
+aiohttp
+beautifulsoup4
+stagehand 
