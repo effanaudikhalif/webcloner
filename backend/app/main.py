@@ -24,7 +24,7 @@ from recreate_site import (
     build_critical_css,
     format_prompt
 )
-from inline_css import inline_css
+from inline_css import inline_css, extract_code_blocks, combine_html_and_css
 
 
 app = FastAPI(
@@ -105,20 +105,8 @@ async def generate(payload: URLSubmit):
     # ─── 8) Extract raw Claude output, then pull out HTML/CSS fences ─────────────────────────────
     raw_output = "".join(part.text for part in response.content if hasattr(part, "text"))
 
-    def extract_code(block_type: str, text: str) -> str:
-        fence_pattern = rf"```{block_type}\s*(.*?)\s*```"
-        match = re.search(fence_pattern, text, re.DOTALL)
-        if match:
-            return match.group(1).strip()
-        if block_type == "css":
-            start_pattern = r"```css\s*(.*)$"
-            match2 = re.search(start_pattern, text, re.DOTALL)
-            if match2:
-                return match2.group(1).strip()
-        return ""
-
-    html_generated = extract_code("html", raw_output)
-    css_generated = extract_code("css", raw_output)
+    # Extract HTML and CSS code blocks from Claude's response
+    html_generated, css_generated = extract_code_blocks(raw_output)
 
     # ─── 9) Inline CSS into the generated HTML ─────────────────────────────
     combined_html = inline_css(html_generated, css_generated)
