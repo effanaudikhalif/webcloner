@@ -7,23 +7,62 @@ export default function CloneSiteApp() {
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
   const [combinedHtml, setCombinedHtml] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleGenerate = async () => {
-    const res = await fetch("http://localhost:8000/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url }),
-    });
+    console.log("🚀 Generate Clone button clicked!");
+    console.log("📝 URL to clone:", url);
+    
+    if (!url) {
+      console.log("❌ No URL provided");
+      alert("Please enter a URL to clone.");
+      return;
+    }
 
-    if (res.ok) {
-      const data = await res.json();
-      setHtml(data.html);
-      setCss(data.css);
-      setCombinedHtml(data.combined_html);
-    } else {
+    setIsLoading(true);
+    setError("");
+    console.log("⏳ Starting cloning process...");
+
+    try {
+      console.log("🌐 Making request to backend...");
+      const res = await fetch("http://localhost:8000/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      console.log("📡 Response received:", res.status, res.statusText);
+
+      if (res.ok) {
+        console.log("✅ Request successful, parsing response...");
+        const data = await res.json();
+        console.log("📦 Response data:", {
+          htmlLength: data.html?.length || 0,
+          cssLength: data.css?.length || 0,
+          combinedLength: data.combined_html?.length || 0
+        });
+        
+        setHtml(data.html);
+        setCss(data.css);
+        setCombinedHtml(data.combined_html);
+        console.log("🎉 Cloning completed successfully!");
+      } else {
+        console.log("❌ Request failed:", res.status, res.statusText);
+        const errorText = await res.text();
+        console.log("📄 Error response:", errorText);
+        setError(`Failed to generate clone: ${res.status} ${res.statusText}`);
+        alert("Failed to generate clone.");
+      }
+    } catch (error: any) {
+      console.log("💥 Exception occurred:", error);
+      setError(`Network error: ${error.message || 'Unknown error'}`);
       alert("Failed to generate clone.");
+    } finally {
+      setIsLoading(false);
+      console.log("🏁 Cloning process finished");
     }
   };
 
@@ -55,18 +94,31 @@ export default function CloneSiteApp() {
         />
         <button
           onClick={handleGenerate}
+          disabled={isLoading}
           style={{
             padding: "0.5rem 1rem",
-            backgroundColor: "#4CAF50",
+            backgroundColor: isLoading ? "#666" : "#4CAF50",
             color: "white",
             border: "none",
             borderRadius: "5px",
-            cursor: "pointer",
+            cursor: isLoading ? "not-allowed" : "pointer",
           }}
         >
-          Generate Clone
+          {isLoading ? "Cloning..." : "Generate Clone"}
         </button>
       </div>
+
+      {error && (
+        <div style={{ 
+          backgroundColor: "#ff4444", 
+          color: "white", 
+          padding: "1rem", 
+          borderRadius: "5px", 
+          marginBottom: "1rem" 
+        }}>
+          Error: {error}
+        </div>
+      )}
 
       {combinedHtml && (
         <>
@@ -98,22 +150,7 @@ export default function CloneSiteApp() {
                 overflowX: "auto",
               }}
             >
-              <code>{html}</code>
-            </pre>
-
-            <h3 style={{ fontSize: "1.25rem", marginTop: "1.5rem" }}>
-              Combined CSS
-            </h3>
-            <pre
-              style={{
-                backgroundColor: "#fff",
-                color: "#000",
-                padding: "1rem",
-                borderRadius: "5px",
-                overflowX: "auto",
-              }}
-            >
-              <code>{css}</code>
+              {combinedHtml}
             </pre>
           </div>
         </>
