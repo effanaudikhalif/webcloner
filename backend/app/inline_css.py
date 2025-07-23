@@ -37,24 +37,30 @@ def extract_code_blocks(text: str) -> Tuple[str, str]:
         r'```css\s*\n(.*?)\n```',
         r'```CSS\s*\n(.*?)\n```',
         r'<style.*?>(.*?)</style>',
-        r'/\*.*?\*/.*?\{.*?\}',  # Look for CSS rules
     ]
     
     for pattern in css_patterns:
-        css_match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
-        if css_match:
-            css_code = css_match.group(1).strip()
-            logger.info(f"      ✅ CSS code block found: {len(css_code)} characters")
-            break
+        try:
+            css_match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+            if css_match and css_match.groups():
+                css_code = css_match.group(1).strip()
+                logger.info(f"      ✅ CSS code block found: {len(css_code)} characters")
+                break
+        except (IndexError, AttributeError) as e:
+            logger.warning(f"      ⚠️  Error extracting CSS with pattern {pattern}: {e}")
+            continue
     
     if not css_code:
-        # Try to extract any CSS-like content
-        css_like = re.findall(r'[.#][a-zA-Z][a-zA-Z0-9_-]*\s*\{[^}]*\}', text)
-        if css_like:
-            css_code = '\n'.join(css_like)
-            logger.info(f"      ✅ CSS-like content found: {len(css_code)} characters")
-        else:
-            logger.warning("      ⚠️  No CSS code block found")
+        # Try to extract any CSS-like content as fallback
+        try:
+            css_like = re.findall(r'[.#][a-zA-Z][a-zA-Z0-9_-]*\s*\{[^}]*\}', text)
+            if css_like:
+                css_code = '\n'.join(css_like)
+                logger.info(f"      ✅ CSS-like content found: {len(css_code)} characters")
+            else:
+                logger.warning("      ⚠️  No CSS code block found")
+        except Exception as e:
+            logger.warning(f"      ⚠️  Error extracting CSS-like content: {e}")
     
     return html_code, css_code
 
