@@ -72,8 +72,8 @@ def filter_css_from_html_and_css(html_content: str, css_content: str) -> str:
         logger.warning("      ⚠️  No CSS content provided")
         return ""
     
-    # Extract CSS selectors
-    logger.info("      → Extracting CSS selectors...")
+    # Extract CSS rules
+    logger.info("      → Extracting CSS rules...")
     css_rules = re.findall(r'([^{}]+)\s*\{[^}]*\}', css_content)
     logger.info(f"      → Found {len(css_rules)} CSS rules")
     
@@ -120,10 +120,26 @@ def filter_css_from_html_and_css(html_content: str, css_content: str) -> str:
     html_selectors = elements.union(classes).union(ids)
     logger.info(f"      ✅ Total unique elements/classes/IDs: {len(html_selectors)}")
     
-    # Filter CSS rules
+    # Filter CSS rules - be less aggressive to preserve more styling
     logger.info("      → Filtering CSS rules...")
     filtered_rules = []
     total_rules = len(css_rules)
+    
+    # Priority selectors that we definitely want to keep
+    priority_selectors = [
+        'body', 'html', '*', 'head', 'meta', 'title', 'div', 'span', 'p', 
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'img', 'ul', 'ol', 'li', 
+        'nav', 'header', 'footer', 'main', 'section', 'article', 'aside',
+        'button', 'input', 'form', 'label', 'table', 'tr', 'td', 'th'
+    ]
+    
+    # Common layout and styling patterns
+    layout_patterns = [
+        'container', 'wrapper', 'header', 'footer', 'nav', 'menu', 
+        'button', 'btn', 'card', 'grid', 'flex', 'row', 'col', 'sidebar',
+        'content', 'main', 'hero', 'banner', 'section', 'block', 'page',
+        'site', 'web', 'theme', 'style', 'layout', 'design'
+    ]
     
     for rule in css_rules:
         # Check if any selector in this rule matches HTML content
@@ -139,13 +155,23 @@ def filter_css_from_html_and_css(html_content: str, css_content: str) -> str:
                 should_keep = True
                 break
             
-            # Also keep important base styles (body, html, *, etc.)
-            if clean_selector in ['body', 'html', '*', 'head', 'meta', 'title']:
+            # Keep priority selectors
+            if clean_selector in priority_selectors:
                 should_keep = True
                 break
             
             # Keep media queries and keyframes
-            if clean_selector.startswith('@media') or clean_selector.startswith('@keyframes'):
+            if clean_selector.startswith('@media') or clean_selector.startswith('@keyframes') or ':' in clean_selector:
+                should_keep = True
+                break
+            
+            # Keep common layout patterns
+            if any(pattern in clean_selector for pattern in layout_patterns):
+                should_keep = True
+                break
+            
+            # Keep any selector that might be important (less aggressive filtering)
+            if len(clean_selector) > 2 and not clean_selector.startswith('_'):
                 should_keep = True
                 break
         
@@ -171,6 +197,12 @@ def filter_css_from_html_and_css(html_content: str, css_content: str) -> str:
     
     logger.info(f"      ✅ CSS filtering complete: {len(filtered_rules)}/{total_rules} rules kept")
     
-    # Combine filtered rules
+    # Combine filtered rules and limit total size
     filtered_css = '\n'.join(filtered_rules)
+    
+    # If still too large, truncate to reasonable size but keep more than before
+    if len(filtered_css) > 100000:  # 100KB limit (increased from 50KB)
+        filtered_css = filtered_css[:100000]
+        logger.info(f"      ⚠️  CSS truncated to 100KB due to size limits")
+    
     return filtered_css 
