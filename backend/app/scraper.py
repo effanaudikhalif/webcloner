@@ -62,8 +62,24 @@ async def scrape_website(url: str) -> ScrapedContext:
             for img in soup.find_all('img'):
                 src = img.get('src')
                 if src:
-                    images.append(src)
+                    # Convert relative URLs to absolute URLs
+                    if src.startswith('//'):
+                        img_url = f"https:{src}"
+                    elif src.startswith('/'):
+                        # Get the base URL
+                        parsed_url = urlparse(url)
+                        base_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+                        img_url = f"{base_url}{src}"
+                    elif src.startswith('http'):
+                        img_url = src
+                    else:
+                        # Relative URL
+                        img_url = urljoin(url, src)
+                    
+                    images.append(img_url)
             logger.info(f"   ✅ Images extracted: {len(images)} found")
+            if images:
+                logger.info(f"   → Sample images: {images[:3]}")
             
             # Extract CSS
             logger.info("   → Extracting inline CSS...")

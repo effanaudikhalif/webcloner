@@ -18,14 +18,14 @@ import uvicorn
 import anthropic  # Anthropic SDK
 
 # import our helper modules
-from scraper import scrape_website
-from filter_css import filter_css_from_html_and_css
-from recreate_site import (
+from app.scraper import scrape_website
+from app.filter_css import filter_css_from_html_and_css
+from app.recreate_site import (
     build_summary_and_minimal_html,
     build_critical_css,
     format_prompt
 )
-from inline_css import inline_css, extract_code_blocks, combine_html_and_css
+from app.inline_css import inline_css, extract_code_blocks, combine_html_and_css
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

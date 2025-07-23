@@ -1,141 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f0f0f2;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main container */
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: #fdfdff;
+    border-radius: 0.5em;
+    box-shadow: 2px 3px 7px 2px rgba(0, 0, 0, 0.02);
+}
+
+/* Typography */
+h1 {
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 0 0 1em 0;
+    color: #333;
+    text-align: left;
+}
+
+p {
+    font-size: 1rem;
+    margin: 0 0 1em 0;
+    color: #555;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+/* Links */
+a {
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover,
+a:focus {
+    color: #0052a3;
+    text-decoration: underline;
+}
+
+a:focus {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        margin: 1em;
+        padding: 1.5em;
+        max-width: none;
+        width: calc(100% - 2em);
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 0.5em;
+        padding: 1em;
+        width: calc(100% - 1em);
+        border-radius: 0.25em;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    p {
+        font-size: 0.9rem;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .container {
+        border: 1px solid #333;
+        box-shadow: none;
+    }
+    
+    a {
+        color: #0000ff;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    a {
+        transition: none;
+    }
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage | Boston University</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Example Domain</title>
 </head>
 <body>
-    <header class="main-header" role="banner">
-        <nav class="navbar" role="navigation" aria-label="Main navigation">
-            <div class="container">
-                <div class="navbar-brand">
-                    <svg class="bu-logo" width="120" height="40" viewBox="0 0 120 40" aria-label="Boston University">
-                        <rect width="120" height="40" class="st0"/>
-                        <text x="10" y="25" class="branding-mark-svg-bu_today-bu" font-family="serif" font-size="18" font-weight="bold">BOSTON</text>
-                        <text x="10" y="35" class="branding-mark-svg-bu_today-today" font-family="serif" font-size="8">UNIVERSITY</text>
-                    </svg>
-                </div>
-                <ul class="navbar-nav" role="menubar">
-                    <li role="menuitem"><a href="#academics">Academics</a></li>
-                    <li role="menuitem"><a href="#admissions">Admissions</a></li>
-                    <li role="menuitem"><a href="#research">Research</a></li>
-                    <li role="menuitem"><a href="#campus-life">Campus Life</a></li>
-                    <li role="menuitem"><a href="#news">News</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-
-    <main class="main-content" role="main">
-        <section class="hero-section" aria-label="Featured content">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-image">
-                        <img src="home/img/Sydney-Lemmon-002-1200x826.jpg" alt="Boston University campus scene" loading="lazy">
-                    </div>
-                    <div class="hero-text">
-                        <h1>Welcome to Boston University</h1>
-                        <p>Discover excellence in education, research, and innovation at one of the world's leading research universities.</p>
-                        <a href="#learn-more" class="cta-button" role="button">Learn More</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="featured-stories" aria-label="Featured stories">
-            <div class="container">
-                <h2>Featured Stories</h2>
-                <div class="stories-grid">
-                    <article class="story-card">
-                        <img src="home/img/AYLI-Bryn-Boyce-feat-150x150.jpg" alt="Student spotlight" loading="lazy">
-                        <div class="story-content">
-                            <h3>Student Spotlight</h3>
-                            <p>Discover the achievements of our exceptional students making a difference in their fields.</p>
-                            <div class="story-source">
-                                <span class="branding-mark-svg-bu_today-bu">BU</span>
-                                <span class="branding-mark-svg-bu_today-today">Today</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="story-card">
-                        <img src="home/img/AdnanHyder_featcrop-150x150.jpg" alt="Faculty research" loading="lazy">
-                        <div class="story-content">
-                            <h3>Research Breakthrough</h3>
-                            <p>Faculty members lead groundbreaking research initiatives across diverse disciplines.</p>
-                            <div class="story-source">
-                                <span class="branding-mark-svg-the_brink-the">The</span>
-                                <span class="branding-mark-svg-the_brink-brink">Brink</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="story-card">
-                        <img src="home/img/25-1252-STOCK-042-feat-150x150.jpg" alt="Campus life" loading="lazy">
-                        <div class="story-content">
-                            <h3>Campus Life</h3>
-                            <p>Experience the vibrant community and countless opportunities for growth and engagement.</p>
-                            <div class="story-source">
-                                <span class="branding-mark-svg-bostonia-bostonia">Bostonia</span>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <section class="highlight-section" aria-label="University highlights">
-            <div class="container">
-                <div class="highlight-content">
-                    <div class="highlight-image">
-                        <img src="home/img/sha-versailles-feat-1024x684.jpg" alt="University program highlight" loading="lazy">
-                    </div>
-                    <div class="highlight-text">
-                        <h2>Global Excellence</h2>
-                        <p>Boston University's commitment to academic excellence and global engagement creates opportunities for students to make their mark on the world.</p>
-                        <a href="#programs" class="secondary-button" role="button">Explore Programs</a>
-                    </div>
-                </div>
-            </div>
+    <main class="container">
+        <header>
+            <h1>Example Domain</h1>
+        </header>
+        <section class="content">
+            <p>This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.</p>
+            <p><a href="https://www.iana.org/domains/example" aria-label="More information about example domains">More information...</a></p>
         </section>
     </main>
-
-    <footer class="main-footer" role="contentinfo">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Academics</h3>
-                    <ul>
-                        <li><a href="#undergraduate">Undergraduate</a></li>
-                        <li><a href="#graduate">Graduate</a></li>
-                        <li><a href="#schools">Schools & Colleges</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Campus</h3>
-                    <ul>
-                        <li><a href="#visit">Visit</a></li>
-                        <li><a href="#maps">Maps & Directions</a></li>
-                        <li><a href="#housing">Housing</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <ul>
-                        <li><a href="#contact">Contact</a></li>
-                        <li><a href="#social">Social Media</a></li>
-                        <li><a href="#news">News & Events</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Boston University. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>

@@ -7,36 +7,38 @@ logger = logging.getLogger(__name__)
 
 def build_summary_and_minimal_html(context_dict: Dict[str, Any]) -> tuple:
     """
-    Build a summary JSON object and minimal HTML snippet from the scraped context.
+    Build a summary JSON object and actual HTML content from the scraped context.
     """
-    logger.info("      → Building summary and minimal HTML...")
+    logger.info("      → Building summary and HTML content...")
     
     title = context_dict.get("title", "Untitled")
     images = context_dict.get("images", [])
     summary = context_dict.get("summary", "")
+    html_content = context_dict.get("html", "")
     
     # Create summary JSON object
     summary_json_obj = {
         "title": title,
         "image_count": len(images),
-        "images": images[:5],  # Limit to first 5 images
+        "images": images[:10],  # Limit to first 10 images
         "summary": summary
     }
     logger.info(f"      → Summary created: {summary_json_obj}")
     
-    # Create minimal HTML snippet
-    minimal_html = f"""
-    <div class="website-clone">
-        <h1>{title}</h1>
-        <div class="content">
-            <p>This is a cloned version of the original website.</p>
-            <p>Summary: {summary}</p>
-        </div>
-    </div>
-    """
-    logger.info(f"      → Minimal HTML created: {len(minimal_html)} characters")
+    # Use the actual scraped HTML content instead of a minimal snippet
+    # Clean up the HTML to remove scripts and other unnecessary elements
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html_content, 'html.parser')
     
-    return summary_json_obj, minimal_html
+    # Remove script tags and other unnecessary elements
+    for script in soup(["script", "noscript", "style"]):
+        script.decompose()
+    
+    # Keep the main structure but clean it up
+    actual_html = str(soup)
+    logger.info(f"      → Actual HTML content prepared: {len(actual_html)} characters")
+    
+    return summary_json_obj, actual_html
 
 
 def build_critical_css(filtered_css: str) -> str:
@@ -59,7 +61,7 @@ def build_critical_css(filtered_css: str) -> str:
     return filtered_css
 
 
-def format_prompt(summary_json_obj: Dict[str, Any], minimal_html: str, critical_css: str) -> str:
+def format_prompt(summary_json_obj: Dict[str, Any], actual_html: str, critical_css: str) -> str:
     """
     Format a prompt for Claude to recreate the website.
     """
@@ -71,39 +73,43 @@ You are a web developer tasked with recreating a website based on the following 
 ## Website Summary
 {json.dumps(summary_json_obj, indent=2)}
 
-## Minimal HTML Structure
+## Original Website HTML Structure
 ```html
-{minimal_html}
+{actual_html[:5000]}  # First 5000 characters of the actual HTML
 ```
 
-## Critical CSS
+## Critical CSS from Original
 ```css
 {critical_css}
 ```
 
 ## Task
-Please recreate this website by providing BOTH HTML and CSS code blocks.
+Please recreate this website by providing BOTH HTML and CSS code blocks that closely match the original.
 
 ## Requirements
-- Use semantic HTML5 elements
-- Create a responsive design
+- Recreate the EXACT layout and structure of the original website
+- Use the same HTML elements and structure as the original
+- Include all images from the original website (use the image URLs provided)
+- Match the original styling, colors, fonts, and layout as closely as possible
+- Use the CSS from the original website as a base and improve upon it
+- Create a responsive design that works on different screen sizes
+- Maintain the original navigation, headers, footers, and content sections
+- Use semantic HTML5 elements where appropriate
 - Include proper accessibility features
-- Match the original styling as closely as possible
-- Use modern CSS techniques (Flexbox, Grid, etc.)
 
 ## IMPORTANT: You MUST provide BOTH HTML and CSS code blocks in your response.
 
 Please provide your response in EXACTLY this format:
 
 ```html
-[Your complete HTML code here]
+[Your complete HTML code here - recreate the original website structure]
 ```
 
 ```css
-[Your complete CSS code here]
+[Your complete CSS code here - match the original styling and layout]
 ```
 
-Make sure the HTML and CSS work together to create a functional, styled webpage. The CSS should be comprehensive and include all necessary styles for the layout, typography, colors, and responsive design.
+Make sure the HTML and CSS work together to create a functional, styled webpage that looks EXACTLY like the original website. The CSS should be comprehensive and include all necessary styles for the layout, typography, colors, images, and responsive design.
 """
     
     logger.info(f"      ✅ Prompt formatted: {len(prompt)} characters")
